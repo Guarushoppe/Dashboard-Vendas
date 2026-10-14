@@ -1,0 +1,206 @@
+﻿OSTEL TRANSPORTES - DASHBOARD VENDAS
+VERSÃO 57 - 14/10/2026
+
+O número da versão também aparece no rodapé do painel, no LEIAME.txt
+e no nome da cópia de segurança (Vendas v57.zip).
+
+HISTÓRICO
+---------
+v57 (14/10/2026) Indício de duplicidade com regra nova. CT-e: mesma NF + CNPJ
+    remetente + CNPJ destinatário + cidade de entrega + valor da NF + peso +
+    cubagem, em qualquer data (Complementar, Reentrega e Devolução não contam).
+    Cotações: mesmo CNPJ pagador + cidade destino + valor da NF + peso +
+    cubagem. O aviso da linha mostra número e data de cada documento do grupo.
+    Painel aberto pela visualização do OneDrive: os botões Excel/PDF/CSV
+    mostram como baixar e oferecem "Copiar a tabela" para colar no Excel.
+v56 (14/10/2026) Detalhamento de Cotações: sem DESC INICIAL; novas colunas
+    Resultado (Desconto / Acréscimo / Sem alteração), Valor do desconto /
+    acréscimo (Proposta Inicial - Proposta Atual) e % (sobre a Proposta
+    Inicial), com total do período. Também no CSV.
+v55 (14/10/2026) Detalhamento de Cotações sem as colunas DESC NTC e RC (também
+    fora do CSV e da ficha). Ajuste em app.js: MAPA.ocultarCot.
+v54 (14/10/2026) Card "Entregas": saíram os botões de ordem (Mais atrasados /
+    Maior frete) e entraram os botões Excel e PDF, que salvam a lista da tela
+    (aba e faixa escolhidas).
+v53 (14/10/2026) Card "Entregas" com cabeçalho mais discreto (estilo Prêmios):
+    percentuais em etiquetas pequenas, abas e resumo numa linha só.
+v52 (14/10/2026) Card renomeado para "Entregas", com dois percentuais do período
+    filtrado (por data de emissão): % de entregas realizadas e % entregues
+    dentro do prazo (Data da Entrega Realizada até a Entrega Programada ou
+    Previsão de Entrega).
+v51 (14/10/2026) Card renomeado para "Entregas não realizadas", com duas abas:
+    "Em atraso" (como na v50) e "No prazo": CT-e sem entrega com o prazo ainda
+    não vencido e quantos dias faltam (vence hoje, amanhã, 2-3, 4-7, +7 dias;
+    ajuste em app.js: prazoFaixas). Ordem "Mais urgentes" ou "Maior frete".
+v50 (14/10/2026) Novo card "Entregas em atraso": CT-e sem Data da Entrega
+    Realizada com o prazo (Entrega Programada ou Previsão de Entrega) vencido,
+    de todos os meses. Faixas de atraso (1-2, 3-5, 6-10, 11-30, +30 dias),
+    ordem por mais atrasados ou maior frete e filtro do painel. Não contam:
+    cancelados e última ocorrência 93, 94 ou 23 (ajuste em app.js:
+    atrasoIgnorarOcorr e atrasoFaixas).
+v49 (14/10/2026) "Torre de Controle SAC" trocado por "Dashboard Vendas" em todos
+    os arquivos: janela do atualizador, BATs, LEIAME e a tarefa agendada (agora
+    "Ostel - Dashboard Vendas"; ao rodar 2_agendar_atualizacao.bat a tarefa com o
+    nome antigo é removida).
+v48 (13/10/2026) "Prêmios e comissão do mês": coluna Prêmio depois de Próxima
+    faixa (Prêmio, Comissão e A receber juntos no fim da linha).
+v47 (13/10/2026) "Ritmo da meta do mês": linhas com cores bem diferentes (azul =
+    vendido, laranja = meta até o dia, cinza = projeção) e quadro do mouse
+    explicado: à frente/atrás da meta no dia e "Neste ritmo: R$ X acima/abaixo
+    da meta".
+v46 (13/10/2026) "Prêmios e comissão do mês" em layout compacto: faixas numa
+    linha de etiquetas e uma tabela com uma linha por vendedora (faturado sem
+    ICMS, barra das faixas, prêmio, próxima faixa, comissão e a receber) e o
+    total no rodapé. Mesmos valores, cerca de 1/3 da altura.
+v45 (13/10/2026) CT-e com "TAXA DE COLETA" na coluna Observação (BC) fica com a
+    Ostel, mesmo que tenha nome de vendedora nas colunas V ou BC. Uma correção
+    no correcoes_vendedora.csv ainda vence esta regra.
+v44 (13/10/2026) CT-e e cotações CANCELADOS saem do painel inteiro (quantidades,
+    valores, gráficos, cards, detalhamento e Excel). Os indicadores mostram
+    quantos ficaram de fora. Correção: a coluna "Frete atual" das tabelas dos
+    gráficos (vendedoras, UF, clientes) e a dica "Frete atual" ao passar o
+    mouse mostravam o valor do gráfico no lugar do frete atual.
+v43 (13/10/2026) O SEM ICMS vale só para PAGAMENTO: comissão (1%) e prêmios
+    por faixa usam o Valor do Frete sem ICMS. Painel da meta, faturado hoje,
+    ritmo, % da meta das vendedoras e gráficos voltam ao Valor do Frete
+    (como na v41).
+v42 (13/10/2026) A META é sem ICMS: painel da meta, faturado hoje/dia anterior,
+    ritmo da meta, % da meta das vendedoras (cards e ranking), prêmios por
+    faixa e comissão usam o Valor do Frete SEM ICMS. Indicadores e gráficos de
+    faturamento continuam mostrando o Valor do Frete (com ICMS).
+v41 (13/10/2026) Comissão das vendedoras passa a ser 1% sobre o Valor do Frete
+    SEM ICMS (antes era sobre o Valor do Frete). Os prêmios por faixa continuam
+    pelo faturamento (Valor do Frete).
+v40 (13/10/2026) Rodapé: "Versão 40 · (salva em ...)" com a hora em que a
+    planilha Comercial CTe foi salva (o detalhe aparece ao passar o mouse).
+v39 (13/10/2026) "Vendedoras": subtítulo só "Cotações e vendas do mês; meta de
+    out/2026".
+v38 (13/10/2026) Painel da meta: "Faturado hoje" (CT-e válidos e % do que
+    precisa vender no dia para bater a meta) e "Dia útil anterior".
+v37 (13/10/2026) Revisão das datas: com De/Até, o painel da meta mostra o
+    faturado no período x meta proporcional aos dias úteis do período (a meta
+    continua mensal); card da vendedora diz "Faturamento no período"; quadro
+    de prêmios avisa que prêmio e comissão são do mês inteiro; indicador não
+    mostra mais % absurdo quando o período anterior quase não tem dados.
+    "Status dos CT-e": subtítulo só "Código da Última Ocorrência".
+v36 (13/10/2026) "Ocorrências CT-e Ag. embarque": subtítulo passa a ser só
+    "N CT-e ainda na origem (sem manifesto)".
+v35 (13/10/2026) Novo quadro "Complemento de carga": CT-e sem saída
+    (aguardando embarque) com Valor do Frete acima de R$ 1.500,00, com total,
+    peso, lista e filtro do painel. Não muda nenhum valor.
+v34 (13/10/2026) Título "Torre de Controle SAC" trocado para "Dashboard Vendas"
+    (topo, barra fixa, aba do navegador, rodapé e títulos do Excel).
+v33 (13/10/2026) Comissão das vendedoras: 1% sobre o faturamento do mês
+    (arquivo dados\comissao.csv, dá para mudar o percentual geral ou de uma
+    vendedora). Aparece no card e no quadro "Prêmios e comissão do mês", com o
+    total a receber (comissão + prêmio) e o total de comissões.
+v32 (13/10/2026) Prêmios das vendedoras: arquivo dados\premios.csv (5 faixas, de
+    R$ 117.000 / R$ 300 até R$ 200.000 / R$ 1.200; a 1ª só com a meta batida).
+    Novo quadro "Prêmios do mês" e prêmio em cada card de vendedora.
+v31 (12/10/2026) Retirado o complemento de carga (v29/v30), a pedido. O painel
+    volta a ser igual à v28. O arquivo dados\complemento_carga.csv, se
+    existir, é ignorado e pode ser apagado.
+v30 (12/10/2026) Complemento de carga é só uma MARCAÇÃO: os CT-e continuam no
+    coletado/armazém conforme a coluna E. O card Coleta x armazém ganha a
+    linha "Complemento de carga" (quantidade e valor, clique para filtrar) e
+    o detalhamento/ficha a coluna "Complemento de carga". Duplicidade volta
+    a ser verificada normalmente nesses CT-e.
+v29 (12/10/2026) Novo arquivo dados\complemento_carga.csv (CT-e ; Observação).
+    Os CT-e listados viram "Complemento de carga": fatia própria no gráfico
+    Coleta x armazém, filtro, ficha e aviso de número não encontrado. Saem do
+    coletado/armazém, mas continuam no faturamento total.
+v28 (12/10/2026) Detalhamento: cada linha ganha um número (1, 2, 3...) e o
+    rodapé mostra "25 linhas na tela · linhas 1–25 de 425", com a opção
+    "Linhas por página" (10, 25, 50 ou 100).
+v27 (12/10/2026) Situação das cotações: retirado o quadro de valor inicial,
+    valor atual e desconto embaixo do gráfico (continuam no tooltip e na
+    tabela/Excel do gráfico).
+v26 (12/10/2026) Detalhamento: títulos das colunas centralizados.
+v25 (12/10/2026) Detalhamento: o título de cada coluna quebra em mais de uma
+    linha, deixando as colunas mais estreitas.
+v24 (12/10/2026) Detalhamento com fonte menor (11,5 em vez de 13) e linhas
+    mais baixas: cabem mais linhas e colunas na tela.
+v23 (12/10/2026) Detalhamento dos CT-e sem as colunas: Tipo do Documento,
+    CNPJ Remetente, Cidade do Remetente, UF do Remetente, CNPJ Destinatario,
+    Cliente Destinatario, Tipo de Baixa, Valor do Frete sem ICMS, Conferente
+    de Carga, Conferente de Descarga, Data de inclusao / Data / Usuario /
+    Unidade da Ultima Ocorrencia. (Só saem da tabela; os cálculos não mudam.)
+v22 (12/10/2026) Título "Ocorrências dos CT-e aguardando embarque" trocado
+    para "Ocorrências CT-e Ag. embarque".
+v21 (12/10/2026) Status dos CT-e: relação mais compacta (letra menor, linhas
+    finas entre itens, código numa etiqueta e descrição em letras normais).
+    A tabela e o Excel continuam com o texto original do SSW.
+v20 (12/10/2026) "Status dos CT-e" volta como era, mas sem o gráfico de
+    rosca: fica o total de CT-e e a relação completa das ocorrências (ou do
+    tipo de baixa), com clique para filtrar, tabela e Excel.
+v19 (12/10/2026) Retirado o gráfico "Status dos CT-e". A linha fica com
+    Situação das cotações e Ocorrências dos CT-e aguardando embarque (maior).
+    O filtro "Status do CT-e" no topo continua.
+v18 (12/10/2026) Novo arquivo dados\Feriados.csv (feriados de SP 2026-2035,
+    da planilha enviada). Feriados com Folga = S deixam de ser dia útil na
+    meta; o painel avisa quando hoje é feriado e lista os feriados do mês.
+v17 (11/10/2026) Coleta x armazém: quantidade de CT-e em cada parte (com os
+    cancelados entre parênteses), no centro e no tooltip.
+v16 (11/10/2026) Cotações: quando USUARIO INCLUSAO for "sistema", o
+    vendedor passa a ser "Sistema" (antes ia para Ostel).
+v15 (11/10/2026) Cards das vendedoras sempre do maior faturamento para o
+    menor (empate: mais cotações), inclusive a Ostel.
+v14 (11/10/2026) Status dos CT-e: novo botão "Última ocorrência" (padrão) que
+    mostra o Código da Ultima Ocorrencia com a descrição do SSW
+    (ex.: "1 - ENTREGA REALIZADA"), com clique para filtrar; o botão
+    "Tipo de baixa" mantém a visão anterior. Situação das cotações: valor
+    inicial x valor atual e o DESCONTO em R$ e % (também no tooltip de cada
+    situação e na tabela/Excel do gráfico).
+v13 (11/10/2026) Meta do mês: destaque "Falta R$ X para bater a meta" (e quanto
+    por dia útil) e uma frase de incentivo que muda todo dia conforme o
+    desempenho (meta batida, no ritmo, pouco abaixo, abaixo do ritmo). Os
+    cards das vendedoras mostram quanto falta para a meta de cada uma.
+v12 (11/10/2026) Gráficos: saiu o botão de impressão/PDF. Ficam ver como
+    tabela, Excel, tela cheia e imagem.
+v11 (11/10/2026) "Codigo da Ultima Ocorrencia" mostra o texto do SSW junto
+    do número (ex.: "62 - SAIDA DA UNIDADE"), pela tabela
+    dados\ocorrencias_ssw.csv (tirada da planilha Ocorrências SSW). Vale na
+    tabela, na ficha, no CSV e na busca.
+v10 (11/10/2026) Correção de vendedora: novo arquivo dados\correcoes_vendedora.csv
+    (CT-e ; Vendedora correta). Para os CT-e listados, o painel usa a
+    vendedora escrita no arquivo em tudo (cards, ranking, meta, gráficos e
+    tabela). Na tabela aparece "(corrigida)". O total geral não muda.
+v9  (11/10/2026) Detalhamento dos CT-e: saíram "Latitude da Ultima
+    Ocorrencia" e "Longitude da Ultima Ocorrencia".
+v8  (11/10/2026) Detalhamento dos CT-e: saíram também "Localizacao Atual",
+    "Data do Cancelamento", "Motivo do Cancelamento" e "Codigo dos
+    Correios". Só saem da tabela: o painel continua usando essas colunas
+    nos cálculos (cancelados e aguardando embarque).
+v7  (11/10/2026) Detalhamento dos CT-e: saíram as colunas "Conferente de
+    Coleta" e "Complemento" (tabela, CSV e ficha). Para esconder outras,
+    use MAPA.ocultarCte / ocultarCot no começo do app.js.
+v6  (11/10/2026) O painel "Motivos de cancelamento" virou "Ocorrências dos
+    CT-e aguardando embarque": CT-e não cancelados, sem Primeiro
+    Manifesto e ainda na origem, agrupados pela coluna "Complemento da
+    Ultima Ocorrencia". Clique na barra para filtrar o painel.
+v5  (11/10/2026) Detalhamento: a linha clicada fica selecionada (fundo azul e
+    contorno) mesmo depois de fechar a ficha; linhas com indício de
+    duplicidade em LETRAS VERMELHAS, com o motivo ao passar o mouse e o
+    botão "Indícios de duplicidade" para ver só elas. Ranking das
+    vendedoras: só as vendedoras do metas.csv do mês.
+v4  (11/10/2026) Taxa de fechamento = CT-e emitidos não cancelados ÷
+    cotações não canceladas (antes: contratadas + CT-e emitido). Novos
+    valores: frete inicial (PROPOSTA INICIAL), frete atual (PROPOSTA
+    ATUAL) e a variação em %, no indicador, nos cards das vendedoras,
+    nas dicas e tabelas dos gráficos, no Excel e na ficha da cotação.
+v3  (11/10/2026) Gráficos com os valores escritos, conforme o botão escolhido
+    (Faturamento em R$ completo, CT-e ou Cotações em quantidade): em cima
+    das barras, no fim das barras deitadas e nos pontos da evolução (quando
+    há espaço). Saem também na imagem e no PDF. O arquivo para envio é
+    refeito sozinho quando o painel muda de versão.
+v2  (11/10/2026) Cards das vendedoras: aparecem só as vendedoras listadas
+    no dados\metas.csv do mês, na ordem do arquivo (mesmo com a meta em
+    branco ou sem vendas), mais a Ostel. Quem não está na lista fica sem
+    card, mas continua nos indicadores, gráficos e tabela (nenhum total
+    mudou). Mês sem lista no metas.csv: mostra todas, como antes.
+v1  (11/10/2026) Primeira versão. Painel de vendas e cotações no layout
+    "Rodovia": meta do mês em destaque, 8 indicadores, card por
+    vendedora, 9 gráficos (cada um com tabela, Excel, PDF, tela cheia e
+    imagem), mapa do Brasil, tabela de CT-e e de cotações, atualização
+    automática, rolagem para TV e arquivo único para envio (Vendas.html)
+    gerado sozinho sempre que uma planilha muda.

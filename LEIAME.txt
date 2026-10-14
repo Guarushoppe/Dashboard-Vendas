@@ -1,0 +1,407 @@
+﻿=====================================================================
+ OSTEL TRANSPORTES - DASHBOARD VENDAS
+ Versão 57 - 14/10/2026
+=====================================================================
+
+O QUE É
+-------
+Painel de vendas e cotações do comercial. Lê duas planilhas:
+  - Comercial CTe.xlsx ........ todas as vendas (CT-e emitidos)
+  - Comercial Cotações.xlsx ... todas as cotações do dia a dia
+e mostra: a meta do mês em destaque, os indicadores, um card para cada
+vendedora, gráficos, mapa do Brasil e a tabela completa. Funciona no
+computador, no celular, no tablet e numa TV, com ou sem internet.
+
+
+INSTALAÇÃO EM 5 PASSOS
+----------------------
+1. A pasta do painel já está em:
+      C:\Users\André\OneDrive\Dashboard Ostel\Vendas
+   (se for usar em outro computador, copie a pasta inteira).
+
+2. Confira no config.ps1 (Bloco de Notas) o caminho das duas planilhas.
+   Já vem preenchido com:
+      C:\Users\André\OneDrive\Dashboard Ostel\Comercial CTe.xlsx
+      C:\Users\André\OneDrive\Dashboard Ostel\Comercial Cotações.xlsx
+   Se o caminho não existir, o painel procura os arquivos com o mesmo
+   nome na pasta acima do painel e depois na pasta "dados".
+
+3. Preencha a meta do mês em dados\metas.csv (abre no Excel):
+      Mês     ; Vendedora ; Meta
+      10/2026 ; TOTAL     ; 250000,00     <- meta geral da empresa
+      10/2026 ; Renata    ; 80000,00      <- meta de cada vendedora
+   Sem a linha TOTAL, a meta geral é a soma das metas das vendedoras.
+   Todo mês, acrescente as linhas do mês novo e salve (CSV).
+   A LISTA DE VENDEDORAS DOS CARDS vem deste arquivo: cada vendedora
+   com uma linha no mês ganha um card. Os cards ficam SEMPRE em ordem
+   de faturamento (maior primeiro).
+   (pode deixar a meta em branco, ex.: 10/2026;Camila;). A Ostel (CT-e
+   sem vendedora nas colunas V e BC) aparece sempre que tiver dados.
+   Quem tem nome mas não está na lista (ex.: Talita) fica sem card, mas
+   as vendas continuam no faturamento, indicadores, gráficos e tabela.
+   Se o mês não tiver nenhuma vendedora no arquivo, aparecem todas.
+
+4. Dê dois cliques em 1_atualizar_agora.bat e depois em
+   2_agendar_atualizacao.bat (cria a tarefa no Agendador do Windows que
+   confere as planilhas a cada 5 minutos e ao entrar no Windows).
+
+5. Dê dois cliques em 4_abrir_dashboard.bat. Deixe o painel aberto: ele
+   relê os dados a cada 30 segundos sozinho, sem perder os filtros.
+
+
+O QUE MUDOU NAS ÚLTIMAS VERSÕES
+-------------------------------
+v57: nova regra de indício de duplicidade (CT-e e cotações); aviso de download
+     bloqueado na visualização do OneDrive, com "Copiar a tabela".
+v56: Cotações com Resultado, valor e % do desconto/acréscimo; sem DESC INICIAL.
+v55: Detalhamento de Cotações sem as colunas DESC NTC e RC.
+v54: card "Entregas" com botões Excel e PDF (sem os botões de ordem).
+v53: card "Entregas" com cabeçalho compacto (etiquetas no estilo Prêmios).
+v52: card "Entregas" com % de entregas realizadas e % dentro do prazo
+     (seguem o período do filtro).
+v51: card "Entregas não realizadas" com abas "Em atraso" e "No prazo"
+     (dias que faltam para o prazo de entrega).
+v50: novo card "Entregas em atraso" (CT-e sem entrega com prazo vencido,
+     todos os meses; faixas de dias de atraso e filtro do painel).
+v49: nome "Torre de Controle SAC" trocado por "Dashboard Vendas" em todos os
+     arquivos (janela do atualizador, tarefa agendada, cabeçalhos).
+v48: quadro de prêmios com a coluna Prêmio depois de Próxima faixa.
+v47: gráfico "Ritmo da meta" com cores mais claras e dica explicada.
+v46: quadro "Prêmios e comissão do mês" em layout compacto (tabela).
+v45: CT-e com "TAXA DE COLETA" na Observação vai para a Ostel.
+v44: CT-e e cotações CANCELADOS fora do painel inteiro; correção da coluna
+     "Frete atual" nas tabelas e dicas dos gráficos.
+v43: SEM ICMS só para pagamento (comissão e prêmios); a meta volta a ser
+     acompanhada pelo Valor do Frete (com ICMS).
+v42: META, prêmios e comissão pelo Valor do Frete SEM ICMS.
+v41: comissão calculada sobre o Valor do Frete SEM ICMS.
+v40: rodapé mais curto: "Versão N · (salva em dd/mm/aaaa, hh:mm)".
+v39: subtítulo de "Vendedoras" mais curto.
+v38: painel da meta mostra o faturado hoje e no dia útil anterior.
+v37: período De/Até também no painel da meta (meta proporcional), avisos
+     de que meta/prêmio/comissão são mensais, e textos mais curtos.
+v36: subtítulo de "Ocorrências CT-e Ag. embarque" mais curto.
+v35: quadro "Complemento de carga" (CT-e sem saída com frete acima de R$ 1.500,00).
+v34: título do painel trocado para "Dashboard Vendas".
+v33: comissão das vendedoras (1% do faturamento do mês, dados\comissao.csv).
+v32: quadro "Prêmios do mês" (faixas do arquivo dados\premios.csv).
+v31: retirado o complemento de carga (painel igual à v28).
+v30: complemento de carga vira só uma marcação (não muda nenhum valor).
+v29: arquivo dados\complemento_carga.csv (CT-e de complemento de carga).
+v28: detalhamento numera as linhas e mostra quantas linhas estão na tela.
+v27: Situação das cotações sem o quadro de valor inicial, atual e desconto.
+v26: títulos das colunas do detalhamento centralizados.
+v25: títulos das colunas do detalhamento quebram em linhas (colunas mais estreitas).
+v24: detalhamento com fonte menor (mais linhas e colunas na tela).
+v23: Detalhamento dos CT-e sem mais 14 colunas (tipo do documento, dados
+     do remetente e destinatário, tipo de baixa, frete sem ICMS,
+     conferentes e dados da última ocorrência, menos o código e o
+     complemento).
+v22: título do gráfico trocado para "Ocorrências CT-e Ag. embarque".
+v21: relação do "Status dos CT-e" com letra menor e visual mais leve.
+v20: "Status dos CT-e" voltou, só com a relação das ocorrências (sem a rosca).
+v19: retirado o gráfico "Status dos CT-e".
+v18: feriados (dados\Feriados.csv) saem dos dias úteis da meta.
+v17: Coleta x armazém mostra também a quantidade de CT-e (e cancelados).
+v16: cotação com USUARIO INCLUSAO "sistema" conta para o vendedor Sistema
+     (com card quando "Sistema" estiver no metas.csv).
+v15: cards das vendedoras sempre do maior faturamento para o menor.
+v14: Status dos CT-e por "Última ocorrência" (código + descrição do SSW,
+     tirada de dados\ocorrencias_ssw.csv) ou por "Tipo de baixa".
+     Situação das cotações com valor inicial, valor atual e desconto.
+v13: meta do mês com "quanto falta" e frase de incentivo do dia. As frases
+     ficam na lista FRASES do app.js (dá para trocar ou acrescentar).
+v12: gráficos sem o botão de impressão/PDF.
+v11: código da última ocorrência com o texto do SSW (dados\ocorrencias_ssw.csv).
+v10: correção de vendedora pelo arquivo dados\correcoes_vendedora.csv.
+v9/v8/v7: Detalhamento sem as colunas Conferente de Coleta, Complemento,
+    Localizacao Atual, Data do Cancelamento, Motivo do Cancelamento,
+    Codigo dos Correios e Latitude/Longitude da Ultima Ocorrencia (lista em MAPA.ocultarCte, no começo do app.js).
+    Elas continuam valendo nos cálculos.
+v6: novo painel "Ocorrências dos CT-e aguardando embarque" no lugar de
+    "Motivos de cancelamento".
+v5: tabela com linha selecionada e indícios de duplicidade em vermelho;
+    ranking das vendedoras só com as vendedoras do metas.csv.
+v4: taxa de fechamento = CT-e não cancelados ÷ cotações não canceladas;
+    novos valores de frete inicial, frete atual e variação (%).
+v3: os gráficos mostram os valores escritos (em cima das barras, no fim
+    das barras deitadas e nos pontos da evolução), conforme o botão
+    escolhido: Faturamento (R$), CT-e ou Cotações (quantidade).
+v2: os cards das vendedoras seguem a lista do dados\metas.csv (veja o
+    passo 3). Nenhum total mudou. Histórico completo no VERSAO.txt.
+
+
+CORRIGIR A VENDEDORA DE UM CT-e
+-------------------------------
+Quando um CT-e sai com a vendedora errada (ex.: emitido como Renata, mas
+a venda é da Jussara), abra dados\correcoes_vendedora.csv no Excel e
+escreva uma linha por CT-e:
+      CT-e         ; Vendedora correta
+      SPO070331-1  ; Jussara
+Salve (CSV). Na próxima atualização (ou com 1_atualizar_agora.bat) o
+painel passa a contar esse CT-e para a vendedora correta em tudo: cards,
+ranking, meta, gráficos e tabela. Na tabela aparece "Jussara (corrigida)"
+e a ficha mostra quem era antes. O total geral não muda. A planilha do
+sistema não é alterada. Se um número não existir na planilha, o painel
+avisa na caixa "aviso(s) na leitura das planilhas".
+
+
+OCORRÊNCIAS DO SSW (código -> texto)
+------------------------------------
+A coluna "Codigo da Ultima Ocorrencia" aparece como "62 - SAIDA DA
+UNIDADE", usando a tabela dados\ocorrencias_ssw.csv (COD ; DESCRICAO),
+feita a partir da planilha "Ocorrências SSW". Se o SSW criar códigos
+novos, acrescente a linha no arquivo (ou troque pelo .xlsx exportado do
+SSW e ajuste ArquivoOcorrencias no config.ps1). Código que não estiver
+na tabela aparece só com o número.
+
+
+COMPLEMENTO DE CARGA
+--------------------
+Quadro com os CT-e que podem ser usados como complemento de carga:
+CT-e SEM SAÍDA (aguardando embarque: não cancelado, sem "Primeiro
+Manifesto" e ainda na origem) com Valor do Frete ACIMA de R$ 1.500,00.
+Mostra quantidade, valor do frete e peso, e a lista (maior frete ou mais
+antigos). Clique numa linha para ver o CT-e no detalhamento, ou no botão
+"Filtrar o painel só por eles". O valor mínimo fica no começo do app.js
+(CONFIG.complementoAcimaDe). Nenhum valor do painel muda.
+
+
+PRÊMIOS DAS VENDEDORAS (dados\premios.csv)
+------------------------------------------
+Faixas de faturamento do mês e o prêmio de cada uma:
+   Faixa;Faturamento mínimo;Prêmio;Exige bater a meta (S/N)
+   1;117000,00;300,00;S
+   2;130000,00;525,00;N
+   3;150000,00;750,00;N
+   4;170000,00;975,00;N
+   5;200000,00;1200,00;N
+ - Vale o faturamento SEM ICMS do MÊS inteiro da vendedora (Valor do
+   Frete sem ICMS dos CT-e não cancelados). O SEM ICMS é usado só para
+   pagamento (prêmio e comissão); o acompanhamento da meta no painel usa o
+   Valor do Frete.
+ - Exige bater a meta = S: a faixa só é paga se a vendedora também
+   bater a própria meta do metas.csv (regra do 1º prêmio).
+ - A vendedora recebe o prêmio da MAIOR faixa alcançada (não soma).
+ - Participam as vendedoras com meta preenchida no metas.csv do mês.
+O painel mostra o quadro "Prêmios do mês" (faixas, barra de cada
+vendedora, quanto falta para a próxima faixa e os ganhadores) e o prêmio
+dentro do card de cada vendedora. Para mudar valores ou faixas, abra o
+arquivo no Excel, altere e salve como CSV. O painel atualiza sozinho.
+
+
+COMISSÃO DAS VENDEDORAS (dados\comissao.csv)
+--------------------------------------------
+Percentual de comissão sobre o VALOR DO FRETE SEM ICMS do mês da
+vendedora (soma da coluna "Valor do Frete sem ICMS" dos CT-e não
+cancelados):
+   Vendedora;Percentual
+   Todas;1
+"Todas" vale para todas as vendedoras com meta. Para uma vendedora ter
+outro percentual, acrescente uma linha com o nome dela (ex.: Renata;1,5).
+O painel mostra a comissão no card de cada vendedora e no quadro
+"Prêmios e comissão do mês" (comissão, total a receber = comissão +
+prêmio, e o total de comissões do mês).
+
+
+FERIADOS (dados\Feriados.csv)
+-----------------------------
+Lista de feriados de São Paulo de 2026 a 2035 (nacionais, estaduais e da
+capital). Colunas: Data ; Dia da semana ; Feriado ; Abrangência ; Tipo ;
+Folga (S/N).
+ - Folga = S: o dia NÃO conta como dia útil na meta (ritmo esperado,
+   quanto vender por dia útil, projeção e gráfico do ritmo).
+ - Folga = N: o dia continua sendo dia útil. O Carnaval veio com N
+   (é ponto facultativo); troque para S se a empresa não trabalhar.
+ - Para incluir um feriado ou uma folga da empresa, acrescente uma linha
+   (ex.: 24/12/2026;quinta-feira;Véspera de Natal;Empresa;Folga;S).
+Abra no Excel, altere e salve como CSV. O painel atualiza sozinho.
+
+
+ARQUIVOS DA PASTA
+-----------------
+ index.html .................. o painel (abra no navegador)
+ style.css / app.js .......... visual e lógica do painel
+ dados.js .................... dados gerados das planilhas (não edite)
+ dados_status.js ............. hora da última conferência (não edite)
+ config.ps1 .................. caminhos das planilhas e ajustes
+ atualizar.ps1 ............... lê as planilhas e gera o dados.js
+ gerar_versao.ps1 ............ monta o arquivo único para envio
+ publicar.ps1 ................ (opcional) envia o painel ao site por FTP/FTPS
+ 1_atualizar_agora.bat ....... atualiza na hora
+ 2_agendar_atualizacao.bat ... liga a atualização automática (5 em 5 min)
+ 3_remover_agendamento.bat ... desliga a atualização automática
+ 4_abrir_dashboard.bat ....... atualiza e abre o painel
+ 5_publicar_site.bat ......... (opcional) publica no site
+ Gerar_Versao_Para_Enviar.bat  gera enviar\Vendas.html (arquivo único)
+ dados\ ...................... metas.csv (e CSVs, se usar CSV)
+ assets\ ..................... Chart.js local, mapa do Brasil, logo
+ enviar\ ..................... Vendas.html, o arquivo para envio
+ logs\ ....................... atualizacao.log (histórico)
+ VERSAO.txt .................. número da versão e histórico
+
+
+ARQUIVO PARA ENVIO (sempre com o mesmo nome)
+--------------------------------------------
+Quando uma planilha é salva, o atualizador percebe (na próxima
+conferência, em até 5 minutos) e inicia SOZINHO o
+Gerar_Versao_Para_Enviar.bat, que grava:
+      enviar\Vendas.html
+É o painel inteiro num arquivo só (dados, gráficos, mapa e logo
+dentro). Abre em qualquer computador ou celular, sem internet, com
+filtros e botões funcionando. O nome é sempre o mesmo: o anterior é
+substituído. Para gerar na hora, dê dois cliques no
+Gerar_Versao_Para_Enviar.bat. Atenção: tem nomes de clientes e
+valores; envie só para quem pode ver.
+
+
+COMO OS NÚMEROS SÃO CALCULADOS (uma regra só, igual em tudo)
+------------------------------------------------------------
+ - Documento CANCELADO fica FORA do painel inteiro (não entra nas
+   quantidades, nos valores, nos gráficos nem no detalhamento):
+     CT-e: Tipo de Baixa "CANCELADO" ou Data do Cancelamento preenchida;
+     cotação: SITUACAO começando com "CANCELAD".
+   Os indicadores de CT-e e de cotações mostram quantos ficaram de fora.
+   (Para voltar a mostrar: CONFIG.ocultarCancelados = false no app.js.)
+ - Faturamento = soma do "Valor do Frete" dos CT-e não cancelados.
+ - Faturamento coletado = CT-e com PLACA na coluna E (Placa de Coleta).
+ - Entregue no armazém = CT-e com "ARMAZEM" na coluna E.
+ - Valor cotado = soma da "PROPOSTA ATUAL" das cotações não canceladas.
+ - Taxa de fechamento = CT-e emitidos NÃO cancelados ÷ cotações NÃO
+   canceladas, no mesmo período e filtros.
+ - Frete inicial = soma da "PROPOSTA INICIAL" e frete atual = soma da
+   "PROPOSTA ATUAL" das cotações não canceladas. Variação do frete =
+   (frete atual − frete inicial) ÷ frete inicial (negativo = desconto).
+ - Ticket médio = faturamento ÷ CT-e não cancelados.
+ - VENDEDORA do CT-e:
+     0) Observação (coluna BC) com "TAXA DE COLETA" -> Ostel (vence tudo,
+        menos o correcoes_vendedora.csv);
+     1) coluna V (Tipo de Calculo): "COTACAO - renata" -> Renata;
+     2) se não tiver, coluna BC (Observação): o primeiro nome que
+        aparece no texto ("RENATA 1080528", "VENDEDORA MONICA ...",
+        "TRATATIVAS FEITA POR TALITA" ...);
+     3) se não tiver em nenhuma, vendedora "Ostel".
+   Apelidos (jussarab -> Jussara, monica -> Mônica) ficam no começo do
+   app.js (CONFIG.apelidos).
+ - VENDEDORA da cotação: o USUARIO INCLUSAO (quem fez a cotação); se foi
+   o "sistema", o vendedor é "Sistema"; sem usuário, o campo VENDEDOR;
+   senão, Ostel.
+ - Meta do mês: compara o faturamento do mês com a meta do metas.csv.
+   "Esperado hoje" usa os dias úteis (segunda a sexta) já passados.
+   Projeção = média por dia útil até agora x dias úteis do mês.
+ - Variação dos indicadores: com o mês em andamento, compara com o
+   mesmo período do mês anterior (dia 1 até o mesmo dia).
+Indicadores, gráficos, tabela, Excel e CSV usam exatamente esta regra.
+
+
+USO NO DIA A DIA
+----------------
+ - O painel abre no MÊS ATUAL. "Limpar filtros" volta para ele (e pisca
+   enquanto houver algum filtro ligado).
+ - Filtros no topo: Data de/até, Ano, Mês, Status (tipo de baixa do
+   CT-e), Vendedora e Busca geral.
+ - Clique numa barra, fatia, ponto, estado do mapa, linha da tabela do
+   gráfico ou card de vendedora para filtrar o painel inteiro; clique de
+   novo para desfazer. Cada filtro vira uma etiqueta com "x".
+   Status, Origem da carga e Motivo valem só para os CT-e; Situação vale
+   só para as cotações (passe o mouse na etiqueta para ver).
+ - Cada gráfico tem 4 botões: ver como tabela, baixar Excel (.xlsx),
+   tela cheia e baixar imagem (PNG).
+ - Clique num indicador para ver melhor/pior dia, média, evolução e os
+   5 maiores clientes.
+ - Tabela: abas "CT-e (vendas)" e "Cotações", com as colunas da planilha
+   na mesma ordem (mais a coluna "Vendedora (painel)"). Clique no título
+   para ordenar; clique na linha para a ficha completa (setas do teclado
+   passam de linha). Linhas canceladas ficam mais claras, com marca
+   laranja, e não entram no TOTAL. "Exportar CSV" baixa o que está
+   filtrado.
+ - A linha clicada fica SELECIONADA (fundo azul e contorno) até você
+   clicar em outra.
+ - INDÍCIO DE DUPLICIDADE (letras vermelhas, para conferir):
+     CT-e: o mesmo número de CT-e em mais de uma linha, ou a mesma nota
+     fiscal do mesmo remetente em mais de um CT-e não cancelado (CT-e
+     "Complementar" não conta);
+     cotação: o mesmo número de cotação repetido, ou mesmo pagador +
+     destino + valor da NF + peso no mesmo dia em cotações não canceladas.
+   Passe o mouse na linha para ver o motivo. O botão "Indícios de
+   duplicidade: N" mostra só essas linhas, juntas. Os valores continuam
+   somados como estão na planilha (o painel só avisa).
+ - Ranking das vendedoras: mostra só as vendedoras do metas.csv do mês
+   (sem lista no mês, mostra todas).
+ - Ocorrências dos CT-e aguardando embarque: CT-e NÃO cancelados, sem
+   "Primeiro Manifesto" e cuja "Localizacao Atual" não diz ENTREGUE, EM
+   TRANSITO nem EM ENTREGA (ainda na origem). São agrupados pelo texto da
+   coluna "Complemento da Ultima Ocorrencia", sem datas e números (ex.:
+   "FRETE PAGO 09/10, CARGA LIBERADA" = "Frete pago carga liberada").
+   "Sem ocorrência (só emitido)" = só a autorização do CT-e. A lista de
+   palavras fica em CONFIG.jaEmbarcou, no começo do app.js.
+ - Botão lua/sol: tema mais claro / mais escuro (fica salvo).
+ - Os filtros ficam no endereço da página: salve como favorito.
+ - Esc fecha janelas e a tela cheia.
+ - Numa TV: depois de 45 s sem ninguém mexer, a página rola sozinha.
+   Mexer o mouse ou tocar na tela para na hora.
+
+
+AJUSTES SIMPLES
+---------------
+ config.ps1: caminhos das planilhas, intervalo do agendamento (5 min),
+             nome do arquivo de envio, FTP do site.
+ app.js (começo do arquivo, bloco CONFIG):
+   recarregarSegundos ......... 30 (releitura dos dados no navegador)
+   alertaDesatualizadoHoras ... 2 (alerta vermelho se a conferência parar)
+   periodoInicial ............. 'mes' | 'ano' | 'tudo'
+   rolagemAutomaticaSegundos .. 45 (0 desliga)
+   apelidos / vendedorasExtras
+ app.js (bloco MAPA): de qual coluna vem cada informação, pelo nome
+   do título ou pela letra (ex.: vendedoraV = 'Tipo de Calculo' ou 'V').
+
+
+CSV EM VEZ DE PLANILHA
+----------------------
+Também funciona com CSV exportado do sistema: coloque o arquivo na pasta
+"dados" com "cte" ou "cota" no nome (ex.: cte_outubro.csv) e deixe o
+caminho do config.ps1 vazio (''), ou aponte o caminho direto para o CSV.
+O atualizador descobre sozinho o separador (; , ou tab), a codificação
+(UTF-8 ou ANSI/Windows-1252 do Excel) e o formato brasileiro (datas
+dd/mm/aaaa, 1.234,56). Linhas vazias e campos em branco são ignorados.
+
+
+CHART.JS SEM INTERNET
+---------------------
+O painel usa o Chart.js pela internet e, se não houver internet, a
+cópia local assets\chart.umd.min.js (já incluída). Se ela sumir, o
+atualizar.ps1 tenta baixar sozinho. Para baixar à mão: abra
+  https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js
+no navegador, use "Salvar como" e grave em assets\chart.umd.min.js.
+
+
+PUBLICAR NO SITE (OPCIONAL)
+---------------------------
+1. Preencha FtpHost, FtpUsuario e FtpPasta no config.ps1.
+2. Dê dois cliques em 5_publicar_site.bat. Na primeira vez ele pede a
+   senha e guarda CRIPTOGRAFADA em credenciais\ftp.xml (só o seu usuário,
+   neste computador, consegue ler). A senha nunca fica no código.
+3. Para publicar sozinho a cada atualização: PublicarAutomaticamente = $true.
+
+
+SOLUÇÃO DE PROBLEMAS
+--------------------
+ - Tela "Não foi possível ler as planilhas": confira os caminhos no
+   config.ps1 e rode 1_atualizar_agora.bat. O motivo fica em
+   logs\atualizacao.log.
+ - Aviso vermelho "Dados desatualizados": a tarefa agendada parou ou o
+   computador estava desligado. Rode 2_agendar_atualizacao.bat de novo.
+ - Bolinha vermelha no topo: o painel não achou o dados.js ou a última
+   conferência deu erro. Passe o mouse para ver o motivo.
+ - "Falha temporária" no log: a planilha estava sendo salva ou
+   sincronizada pelo OneDrive. O painel continua com os últimos dados e
+   tenta de novo em 5 minutos.
+ - Planilha aberta no Excel: não tem problema, ela é lida mesmo aberta.
+ - Meta aparece como "não definida": preencha dados\metas.csv com o mês
+   no formato 10/2026 e o valor 250000,00 (sem fórmulas).
+ - Gráficos não aparecem: falta o assets\chart.umd.min.js e não há
+   internet. Veja "CHART.JS SEM INTERNET".
+ - Windows bloqueou os scripts: clique com o botão direito no .bat >
+   Propriedades > Desbloquear (o 1_atualizar_agora.bat já faz isso).
+ - Vendas.html não foi gerado: veja logs\atualizacao.log (linhas
+   "Envio:"); se o arquivo estiver aberto em outro programa, feche-o.

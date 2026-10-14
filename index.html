@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A2233">
+<title>Ostel · Dashboard Vendas</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<!-- Aplica o tema salvo ANTES de desenhar a página (evita "piscar" claro/escuro) -->
+<script>
+  try { var t = localStorage.getItem('ostel-theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+</head>
+<body>
+
+<!-- =================================================================
+     BARRA SUPERIOR (fixa): status da atualização, recarregar e tema.
+     Ao rolar a página, à esquerda aparecem o logo, o título e o resumo
+     do filtro (período, CT-e, estados, clientes).
+     ================================================================= -->
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <!-- logotipo da Ostel (arquivo assets\img\logo.png); se o arquivo faltar, aparece o texto OSTEL -->
+        <img src="assets/img/logo.png" alt="" onerror="this.parentNode.classList.add('noimg')">
+        <span class="fallback">OSTEL</span>
+      </div>
+      <div class="brand-txt" aria-hidden="true">Dashboard Vendas</div>
+      <div class="top-meta" id="topMeta" aria-hidden="true"></div>
+    </div>
+    <div class="live" id="live" title="O painel relê o arquivo dados.js a cada 30 segundos">
+      <span class="dot"></span>
+      <span class="txt"><span class="txt-long">Atualização automática · </span><span id="liveTxt">carregando…</span></span>
+    </div>
+    <button class="iconbtn" id="btnRefresh" title="Recarregar dados agora" aria-label="Recarregar dados agora">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </button>
+    <button class="iconbtn" id="btnTheme" title="Tema mais claro / mais escuro" aria-label="Alternar tema claro ou escuro">
+      <svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- =================================================================
+     CABEÇALHO "ASFALTO": logo + título + valores da empresa + ROTA
+     A rota é a faixa tracejada com 4 paradas (período, CT-e, estados,
+     clientes) e acompanha os filtros. O conteúdo vem do app.js.
+     ================================================================= -->
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-txt">
+      <div class="logo logo-g" id="logo">
+        <img src="assets/img/logo.png" alt="Ostel Transportes" onerror="this.parentNode.classList.add('noimg')">
+        <span class="fallback">OSTEL</span>
+      </div>
+      <h1>Dashboard Vendas</h1>
+      <!-- valores da empresa, como no site ostel.com.br -->
+      <p class="valores"><b>Valores:</b> Respeito é a base do nosso negócio. Ética e Integridade reforçam nossos valores. Comprometimento e Inovação.</p>
+    </div>
+    <div class="meta" id="heroMeta" aria-label="Resumo do que está filtrado"></div>
+  </div>
+</section>
+
+<!-- =================================================================
+     FILTROS (parte do cabeçalho)
+     Computador: barra cor de asfalto FIXA abaixo da barra superior.
+     Tablet/celular: painel recolhido atrás do botão "Filtros".
+     UF, cliente, origem da carga, situação etc. são filtrados clicando
+     nos gráficos; o filtro ligado aparece como etiqueta aqui.
+     ================================================================= -->
+<section class="filters" id="filters" aria-label="Filtros" hidden>
+  <div class="wrap">
+    <div class="f-in">
+      <div class="f-head">
+        <button class="btn f-toggle" id="btnToggleF" aria-expanded="false" aria-controls="fBody">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+          Filtros <span id="fCount"></span>
+        </button>
+        <button class="btn clear" data-clear title="Remove os filtros e volta para o mês atual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/><path d="M17 17l4 4M21 17l-4 4"/></svg>
+          <span>Limpar<span class="so-largo"> filtros</span></span>
+        </button>
+      </div>
+      <div class="f-body" id="fBody">
+        <div class="f-grid">
+          <div class="fld" data-f="de"><label for="f_de">Data de</label><input type="date" id="f_de"></div>
+          <div class="fld" data-f="ate"><label for="f_ate">até</label><input type="date" id="f_ate"></div>
+          <div class="fld" data-f="ano"><label for="f_ano">Ano</label><select id="f_ano"></select></div>
+          <div class="fld" data-f="mes"><label for="f_mes">Mês</label><select id="f_mes"></select></div>
+          <div class="fld" data-f="status"><label for="f_status" title="Tipo de baixa do CT-e">Status</label><select id="f_status"></select></div>
+          <div class="fld" data-f="vendedora"><label for="f_vendedora">Vendedora</label><select id="f_vendedora"></select></div>
+          <div class="fld largo q" data-f="q"><label for="f_q">Busca geral</label><input type="search" id="f_q" placeholder="CT-e, cotação, cliente, cidade…"></div>
+        </div>
+      </div>
+      <!-- etiquetas dos filtros ligados (inclusive os feitos por clique nos gráficos e no mapa) -->
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- Painel de estado: carregando / sem dados / erro (nunca tela em branco) -->
+  <section class="estado" id="estado">
+    <div class="box"><div class="spin"></div><p>Carregando dados…</p></div>
+  </section>
+
+  <div id="conteudo" hidden>
+    <div class="main-col">
+
+      <!-- aviso de atualização parada (dados desatualizados há mais de X horas) -->
+      <div class="alerta" id="alertaVelho" role="alert" hidden></div>
+      <!-- aviso quando uma das planilhas não pôde ser lida -->
+      <div class="alerta" id="alertaFonte" role="alert" hidden></div>
+
+      <!-- ===================== META DO MÊS (destaque) ===================== -->
+      <section class="meta-mes" id="metaMes" aria-label="Meta do mês"></section>
+
+      <!-- ===================== INDICADORES ===================== -->
+      <section class="kpis" id="kpis" aria-label="Indicadores"></section>
+
+      <!-- avisos do atualizador (ex.: linhas ignoradas) -->
+      <details class="avisos" id="avisos" hidden><summary></summary><ul></ul></details>
+
+      <!-- ===================== CARDS DAS VENDEDORAS ===================== -->
+      <section class="card vend-card" id="cardVendedoras" style="--c:var(--s4)">
+        <div class="c-head">
+          <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.8.3 5 2.6 5 5.8"/></svg></span>
+          <div class="grow"><h3>Vendedoras</h3><p id="vendInfo">Cotações e vendas do mês</p></div>
+        </div>
+        <div class="vend-grid" id="vendGrid"></div>
+      </section>
+
+      <!-- ===================== PRÊMIOS DO MÊS ===================== -->
+      <section class="card premios-card" id="cardPremios" style="--c:var(--good)" hidden>
+        <div class="c-head">
+          <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span>
+          <div class="grow"><h3 id="premTit">Prêmios do mês</h3><p id="premInfo">Faixas de faturamento e prêmio de cada vendedora.</p></div>
+        </div>
+        <div class="pr-body" id="premBody"></div>
+      </section>
+
+      <!-- ===================== GRÁFICOS ===================== -->
+      <section class="grid">
+
+        <!-- Linha 1: evolução (largura toda) -->
+        <article class="card full" style="--c:var(--s1)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/><path d="M16 8h4v4"/></svg></span>
+            <div class="grow"><h3>Evolução de vendas e cotações</h3><p id="evoInfo">Por dia de emissão do CT-e e de inclusão da cotação. Clique em um ponto para filtrar.</p></div>
+            <div class="seg-grupo">
+              <div class="seg" id="segEvoMed"><button data-v="fat" class="on">Valores</button><button data-v="qtd">Quantidade</button></div>
+              <div class="seg" id="segEvo"><button data-v="p" class="on">No período</button><button data-v="a">Acumulado</button></div>
+            </div>
+          </div>
+          <div class="c-body"><div class="chart-box tall"><canvas id="chEvo" aria-label="Evolução de vendas e cotações" role="img"></canvas></div></div>
+        </article>
+
+        <!-- Linha 2: mapa do Brasil + barras por estado -->
+        <article class="card full" id="cardUF" style="--c:var(--s1)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span>
+            <div class="grow"><h3>Vendas por estado de entrega</h3><p>UF de entrega do CT-e e UF de destino da cotação. Clique em um estado ou barra para filtrar.</p></div>
+            <div class="seg" id="segUF"><button data-v="fat" class="on">Faturamento</button><button data-v="qtd">CT-e</button><button data-v="cot">Cotações</button></div>
+          </div>
+          <div class="c-body">
+            <div class="destinos">
+              <div class="mapa" id="mapaUF"></div>
+              <div class="chart-box" id="boxUF"><canvas id="chUF" aria-label="Vendas por UF" role="img"></canvas></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Linha 3: ritmo da meta (8) + coleta x armazém (4) -->
+        <article class="card w8 t-full" style="--c:var(--s3)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></span>
+            <div class="grow"><h3>Ritmo da meta do mês</h3><p id="ritmoInfo">Faturamento acumulado dia a dia contra o ritmo necessário para bater a meta.</p></div></div>
+          <div class="c-body"><div class="chart-box"><canvas id="chRitmo" aria-label="Ritmo da meta do mês" role="img"></canvas></div></div>
+        </article>
+
+        <article class="card w4" style="--c:var(--s2)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4.5L22 12.5V16h-8z"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span>
+            <div class="grow"><h3>Coleta x armazém</h3><p>Faturamento e quantidade de CT-e pela coluna E (Placa de Coleta). Clique para filtrar.</p></div></div>
+          <div class="c-body"><div class="donut-wrap"><div class="chart-box"><canvas id="chOrigem" aria-label="Coleta e armazém" role="img"></canvas></div><ul class="dl" id="lgOrigem"></ul></div></div>
+        </article>
+
+        <!-- Linha 4: dois rankings -->
+        <article class="card" style="--c:var(--s4)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg></span>
+            <div class="grow"><h3>Ranking das vendedoras</h3><p>Vendedoras do metas.csv do mês. Clique para filtrar.</p></div>
+            <div class="seg" id="segVend"><button data-v="fat" class="on">Faturamento</button><button data-v="qtd">CT-e</button><button data-v="cot">Cotações</button><button data-v="meta">% meta</button></div>
+          </div>
+          <div class="c-body"><div class="chart-box" id="boxVend"><canvas id="chVend" aria-label="Ranking das vendedoras" role="img"></canvas></div></div>
+        </article>
+
+        <article class="card" style="--c:var(--s1)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M8 21v-7h8v7M3 21h18"/></svg></span>
+            <div class="grow"><h3>Top 10 clientes pagadores</h3><p>Cliente pagador do CT-e e da cotação. Clique para filtrar.</p></div>
+            <div class="seg" id="segCli"><button data-v="fat" class="on">Faturamento</button><button data-v="qtd">CT-e</button><button data-v="cot">Cotações</button></div>
+          </div>
+          <div class="c-body"><div class="chart-box" id="boxCli"><canvas id="chCli" aria-label="Top 10 clientes" role="img"></canvas></div></div>
+        </article>
+
+        <!-- Linha 5: três painéis -->
+        <article class="card w4" style="--c:var(--s2)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span>
+            <div class="grow"><h3>Situação das cotações</h3><p>Quantidade de cotações. Clique para filtrar.</p></div></div>
+          <div class="c-body"><div class="donut-wrap"><div class="chart-box"><canvas id="chSit" aria-label="Situação das cotações" role="img"></canvas></div><ul class="dl" id="lgSit"></ul></div></div>
+        </article>
+
+        <article class="card w4 sem-grafico" style="--c:var(--good)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12.5l2 2 4-4.5"/></svg></span>
+            <div class="grow"><h3>Status dos CT-e</h3><p id="baixaInfo">Código da Última Ocorrência</p></div>
+            <div class="seg" id="segBaixa"><button data-v="ocor" class="on">Última ocorrência</button><button data-v="baixa">Tipo de baixa</button></div></div>
+          <div class="c-body"><div class="donut-wrap"><div class="chart-box" hidden><canvas id="chBaixa" aria-label="Status dos CT-e" role="img"></canvas></div><div class="lista-total" id="baixaTotal"></div><ul class="dl" id="lgBaixa"></ul></div></div>
+        </article>
+
+        <article class="card w4" style="--c:var(--warn)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 20v-6h8v6"/><path d="M12 9.5V12l1.5 1"/></svg></span>
+            <div class="grow"><h3>Ocorrências CT-e Ag. embarque</h3><p id="ocorInfo">CT-e ainda na origem (sem manifesto)</p></div></div>
+          <div class="c-body"><div class="chart-box" id="boxOcor"><canvas id="chOcor" aria-label="Ocorrências dos CT-e aguardando embarque" role="img"></canvas></div></div>
+        </article>
+
+        <!-- ===================== COMPLEMENTO DE CARGA ===================== -->
+        <article class="card full compl-card" id="cardCompl" style="--c:var(--s4)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h13v10H1zM14 9h4l3 3v4h-7z"/><circle cx="5.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/><path d="M5 11h5M7.5 8.5v5"/></svg></span>
+            <div class="grow"><h3>Complemento de carga</h3><p id="complInfo">CT-e sem saída com frete acima do valor mínimo.</p></div>
+            <div class="seg" id="segCompl"><button data-ord="frete" class="on">Maior frete</button><button data-ord="data">Mais antigos</button></div>
+          </div>
+          <div class="c-body">
+            <div class="compl-resumo" id="complResumo"></div>
+            <div class="compl-wrap"><table class="compl-tab" id="complTab"></table></div>
+          </div>
+        </article>
+
+        <!-- ===================== v50/v51 ENTREGAS NÃO REALIZADAS (em atraso | no prazo) ===================== -->
+        <article class="card full compl-card atr-card" id="cardAtraso" style="--c:var(--bad)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6M12 2v3"/></svg></span>
+            <div class="grow"><h3 id="atrTit">Entregas</h3><p id="atrInfo">CT-e sem entrega: em atraso e no prazo.</p></div>
+            <div class="c-tools"><button type="button" class="tbtn" data-a="xls" title="Baixar a lista para Excel (.xlsx)" aria-label="Baixar a lista para Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9.5 12l5 6M14.5 12l-5 6"/></svg></button><button type="button" class="tbtn" data-a="pdf" title="Salvar a lista em PDF" aria-label="Salvar a lista em PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg></button></div>
+          </div>
+          <div class="c-body">
+            <div class="atr-kpis" id="atrKpis"></div>
+            <div class="atr-linha"><div class="atr-modo" id="atrModo" role="tablist"></div><div class="atr-resumo" id="atrResumo"></div></div>
+            <div class="atr-faixas" id="atrFaixas"></div>
+            <div class="compl-wrap"><table class="compl-tab" id="atrTab"></table></div>
+          </div>
+        </article>
+
+        <!-- ===================== TABELA DE DETALHAMENTO ===================== -->
+        <article class="card full" id="cardTable" style="--c:var(--brand)">
+          <!-- este bloco (título + busca) fica fixo quando a rolagem chega na tabela -->
+          <div class="t-fixo">
+            <div class="c-head">
+              <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>
+              <div class="grow"><h3>Detalhamento</h3><p id="tblInfo">—</p></div>
+            </div>
+            <div class="t-tools">
+              <div class="seg" id="segTab" role="tablist"><button data-v="cte" class="on" role="tab">CT-e (vendas)</button><button data-v="cot" role="tab">Cotações</button></div>
+              <div class="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                <input type="search" id="tblSearch" placeholder="Pesquisar na tabela…" aria-label="Pesquisar na tabela">
+              </div>
+              <!-- aparece só quando há linhas com indício de duplicidade no que está filtrado -->
+              <button class="btn dup" id="btnDup" type="button" hidden aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+                <span>Indícios de duplicidade</span>
+              </button>
+              <button class="btn primary" id="btnCsv">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+          <div class="tbl-wrap"><table id="tbl"><thead></thead><tbody></tbody><tfoot></tfoot></table></div>
+          <div class="pager" id="pager"></div>
+        </article>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <div>Ostel Transportes · Dashboard Vendas</div>
+    <div id="footInfo"></div>
+  </footer>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- Janela de detalhamento dos indicadores -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-label="Detalhamento do indicador">
+  <div class="m-box">
+    <button type="button" class="iconbtn m-close" aria-label="Fechar (Esc)" title="Fechar (Esc)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="m-body"></div>
+  </div>
+</div>
+
+<!-- Ficha completa da linha (painel lateral) -->
+<div class="drawer" id="ficha" hidden role="dialog" aria-modal="true" aria-label="Ficha completa">
+  <aside class="d-box">
+    <div class="d-head">
+      <div class="d-title"></div>
+      <button type="button" class="iconbtn d-close" aria-label="Fechar (Esc)" title="Fechar (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="d-body"></div>
+    <div class="d-foot">
+      <button type="button" class="btn" id="fichaAnt" title="Linha anterior (seta ←)">‹ Anterior</button>
+      <span id="fichaPos" class="num"></span>
+      <button type="button" class="btn" id="fichaProx" title="Próxima linha (seta →)">Próximo ›</button>
+      <button type="button" class="btn primary" id="fichaCli">Filtrar este cliente</button>
+    </div>
+  </aside>
+</div>
+
+<!-- =================================================================
+     BIBLIOTECA DE GRÁFICOS (Chart.js)
+     1º tenta pela internet (CDN); se falhar, usa a cópia local
+     assets\chart.umd.min.js  -> funciona sem internet.
+     ================================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+<script>
+  if (!window.Chart) { document.write('<script src="assets/chart.umd.min.js"><\/script>'); }
+</script>
+
+<!-- Contornos dos estados para o mapa (arquivo local: funciona sem internet) -->
+<script src="assets/mapa-brasil.js"></script>
+
+<!-- Lógica do painel (os dados vêm de dados.js e dados_status.js, carregados pelo app.js) -->
+<script src="app.js"></script>
+</body>
+</html>
