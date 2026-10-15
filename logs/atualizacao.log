@@ -417,3 +417,25 @@
 [14/10/2026 22:22:17] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16325 KB)
 [14/10/2026 23:20:54] [INFO] Sem alterações nas planilhas. Nada a fazer (use 1_atualizar_agora.bat para refazer).
 [14/10/2026 23:20:56] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16325 KB)
+[15/10/2026 08:43:12] [OK] Comercial CTe: 13303 linhas, 57 colunas (planilha, aba 'cte comercial')
+[15/10/2026 08:43:15] [OK] Comercial Cotações: 20586 linhas, 40 colunas (planilha, aba 'cotações')
+[15/10/2026 08:43:15] [OK] Ocorrências do SSW: 82 códigos em ocorrencias_ssw.csv
+[15/10/2026 08:43:15] [OK] Correções de vendedora: 0 CT-e em correcoes_vendedora.csv
+[15/10/2026 08:43:15] [OK] Comissão: 1 linha(s) em comissao.csv
+[15/10/2026 08:43:15] [OK] Prêmios: 5 faixa(s) em premios.csv
+[15/10/2026 08:43:15] [OK] Feriados: 130 dias de folga em Feriados.csv (20 marcados para trabalhar)
+[15/10/2026 08:43:16] [OK] Metas: 58 linha(s) lida(s) de metas.csv
+[15/10/2026 08:43:24] [OK] dados.js atualizado (15595 KB).
+[15/10/2026 08:43:25] [OK] Gerar_Versao_Para_Enviar.bat iniciado (planilha atualizada).
+[15/10/2026 08:43:38] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16325 KB)
+[15/10/2026 09:39:46] [OK] Comercial CTe: 13303 linhas, 57 colunas (planilha, aba 'cte comercial')
+[15/10/2026 09:39:48] [OK] Comercial Cotações: 20586 linhas, 40 colunas (planilha, aba 'cotações')
+[15/10/2026 09:39:49] [OK] Ocorrências do SSW: 82 códigos em ocorrencias_ssw.csv
+[15/10/2026 09:39:49] [OK] Correções de vendedora: 0 CT-e em correcoes_vendedora.csv
+[15/10/2026 09:39:49] [OK] Comissão: 1 linha(s) em comissao.csv
+[15/10/2026 09:39:49] [OK] Prêmios: 5 faixa(s) em premios.csv
+[15/10/2026 09:39:49] [OK] Feriados: 130 dias de folga em Feriados.csv (20 marcados para trabalhar)
+[15/10/2026 09:39:49] [OK] Metas: 58 linha(s) lida(s) de metas.csv
+[15/10/2026 09:39:57] [OK] dados.js atualizado (15595 KB).
+[15/10/2026 09:39:58] [OK] Gerar_Versao_Para_Enviar.bat iniciado (planilha atualizada).
+[15/10/2026 09:40:12] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16331 KB)

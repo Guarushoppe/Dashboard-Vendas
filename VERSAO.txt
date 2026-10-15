@@ -1,11 +1,21 @@
 ﻿OSTEL TRANSPORTES - DASHBOARD VENDAS
-VERSÃO 57 - 14/10/2026
+VERSÃO 61 - 15/10/2026
 
 O número da versão também aparece no rodapé do painel, no LEIAME.txt
-e no nome da cópia de segurança (Vendas v57.zip).
+e no nome da cópia de segurança (Vendas v61.zip).
 
 HISTÓRICO
 ---------
+v61 (15/10/2026) Status dos CT-e com botões 10 / 20 / 30 ocorrências (abre em
+    10). Total e % continuam sobre todos os CT-e; mostra quantas ocorrências
+    ficaram de fora. Tabela e Excel com tudo.
+v60 (15/10/2026) Card de cidades também com Top 40 e Top 50.
+v59 (15/10/2026) Card de cidades com botões Top 10 / Top 20 / Top 30 (abre em
+    Top 10; o título acompanha). Tabela e Excel continuam com todas as cidades.
+v58 (15/10/2026) Novos cards "Vendas por região" (Norte, Nordeste, Centro-Oeste,
+    Sudeste e Sul, pela UF de entrega/destino) e "Top 15 cidades de entrega",
+    com Faturamento / CT-e / Cotações, clique para filtrar (filtros Região e
+    Cidade), tabela e Excel (todas as cidades, com a região).
 v57 (14/10/2026) Indício de duplicidade com regra nova. CT-e: mesma NF + CNPJ
     remetente + CNPJ destinatário + cidade de entrega + valor da NF + peso +
     cubagem, em qualquer data (Complementar, Reentrega e Devolução não contam).

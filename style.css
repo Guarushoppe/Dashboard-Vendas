@@ -1172,3 +1172,6 @@ td.res-acr-t { color: var(--good); }
 .bloq ol { margin: 6px 0 4px 20px; padding: 0; font-size: 13.5px; line-height: 1.6; }
 .bloq .btn-copiar { margin-top: 6px; border: 0; border-radius: 8px; padding: 9px 16px; background: var(--brand); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
 .bloq .btn-copiar:hover { filter: brightness(1.08); }
+
+/* ===== v61 Status dos CT-e: Top 10/20/30 ===== */
+.lista-total .lt-resto { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; margin-top: 2px; }

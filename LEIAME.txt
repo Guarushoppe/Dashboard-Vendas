@@ -1,6 +1,6 @@
 ﻿=====================================================================
  OSTEL TRANSPORTES - DASHBOARD VENDAS
- Versão 57 - 14/10/2026
+ Versão 61 - 15/10/2026
 =====================================================================
 
 O QUE É
@@ -51,6 +51,10 @@ INSTALAÇÃO EM 5 PASSOS
 
 O QUE MUDOU NAS ÚLTIMAS VERSÕES
 -------------------------------
+v61: Status dos CT-e com botões 10 / 20 / 30 ocorrências.
+v60: botões Top 40 e Top 50 no card de cidades.
+v59: botões Top 10 / 20 / 30 no card de cidades.
+v58: cards "Vendas por região" e "Top 15 cidades de entrega" (com filtros).
 v57: nova regra de indício de duplicidade (CT-e e cotações); aviso de download
      bloqueado na visualização do OneDrive, com "Copiar a tabela".
 v56: Cotações com Resultado, valor e % do desconto/acréscimo; sem DESC INICIAL.

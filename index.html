@@ -174,6 +174,26 @@
           </div>
         </article>
 
+        <!-- v58: regiões do Brasil + top 15 cidades -->
+        <article class="card" id="cardReg" style="--c:var(--s3)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+            <div class="grow"><h3>Vendas por região</h3><p>Norte, Nordeste, Centro-Oeste, Sudeste e Sul, pela UF de entrega. Clique para filtrar.</p></div>
+            <div class="seg" id="segReg"><button data-v="fat" class="on">Faturamento</button><button data-v="qtd">CT-e</button><button data-v="cot">Cotações</button></div>
+          </div>
+          <div class="c-body"><div class="chart-box" id="boxReg"><canvas id="chReg" aria-label="Vendas por região do Brasil" role="img"></canvas></div></div>
+        </article>
+
+        <article class="card" id="cardCid" style="--c:var(--s4)">
+          <div class="c-head">
+            <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+            <div class="grow"><h3 id="cidTit">Top 10 cidades de entrega</h3><p>Cidade de entrega do CT-e e cidade de destino da cotação. Clique para filtrar.</p></div>
+            <div class="seg" id="segCid"><button data-v="fat" class="on">Faturamento</button><button data-v="qtd">CT-e</button><button data-v="cot">Cotações</button></div>
+            <div class="seg" id="segCidTop"><button data-v="10" class="on">Top 10</button><button data-v="20">Top 20</button><button data-v="30">Top 30</button><button data-v="40">Top 40</button><button data-v="50">Top 50</button></div>
+          </div>
+          <div class="c-body"><div class="chart-box" id="boxCid"><canvas id="chCid" aria-label="Top cidades de entrega" role="img"></canvas></div></div>
+        </article>
+
         <!-- Linha 3: ritmo da meta (8) + coleta x armazém (4) -->
         <article class="card w8 t-full" style="--c:var(--s3)">
           <div class="c-head">
@@ -220,7 +240,8 @@
           <div class="c-head">
             <span class="c-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12.5l2 2 4-4.5"/></svg></span>
             <div class="grow"><h3>Status dos CT-e</h3><p id="baixaInfo">Código da Última Ocorrência</p></div>
-            <div class="seg" id="segBaixa"><button data-v="ocor" class="on">Última ocorrência</button><button data-v="baixa">Tipo de baixa</button></div></div>
+            <div class="seg" id="segBaixa"><button data-v="ocor" class="on">Última ocorrência</button><button data-v="baixa">Tipo de baixa</button></div>
+            <div class="seg" id="segBaixaTop"><button data-v="10" class="on">10 ocorrências</button><button data-v="20">20 ocorrências</button><button data-v="30">30 ocorrências</button></div></div>
           <div class="c-body"><div class="donut-wrap"><div class="chart-box" hidden><canvas id="chBaixa" aria-label="Status dos CT-e" role="img"></canvas></div><div class="lista-total" id="baixaTotal"></div><ul class="dl" id="lgBaixa"></ul></div></div>
         </article>
 

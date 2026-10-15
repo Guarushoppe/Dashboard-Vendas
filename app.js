@@ -65,7 +65,7 @@
     prazoFaixas: [0, 1, 3, 7],
     // CANCELADOS: CT-e e cotações canceladas ficam FORA do painel inteiro (não aparecem em nada)
     ocultarCancelados: true,
-    versao: '57'                        // número da versão do painel (aparece no rodapé)
+    versao: '61'                        // número da versão do painel (aparece no rodapé)
   };
 
   /* ===================================================================
@@ -242,15 +242,15 @@
   var IDX = { cte: {}, cot: {} };   // posição de cada campo do MAPA nas colunas do dados.js
 
   // filtros ativos (vazio = sem filtro)
-  var F = { de: '', ate: '', ano: '', mes: '', ym: '', dia: '', status: '', vendedora: '', uf: '', cliente: '', origem: '', situacao: '', motivo: '', ocorr: '', codoc: '', compl: '', atraso: '', q: '' };
+  var F = { de: '', ate: '', ano: '', mes: '', ym: '', dia: '', status: '', vendedora: '', uf: '', cliente: '', origem: '', situacao: '', motivo: '', ocorr: '', codoc: '', compl: '', atraso: '', regiao: '', cidade: '', q: '' };
   var F_ROTULO = { de: 'De', ate: 'Até', ano: 'Ano', mes: 'Mês', ym: 'Mês/ano', dia: 'Dia', status: 'Status do CT-e', vendedora: 'Vendedora', uf: 'UF',
-                   cliente: 'Cliente', origem: 'Origem da carga', situacao: 'Situação da cotação', motivo: 'Motivo do cancelamento', ocorr: 'Ocorrência (aguardando embarque)', codoc: 'Última ocorrência do CT-e', compl: 'Complemento de carga', atraso: 'Entregas', q: 'Busca' };
+                   cliente: 'Cliente', origem: 'Origem da carga', situacao: 'Situação da cotação', motivo: 'Motivo do cancelamento', ocorr: 'Ocorrência (aguardando embarque)', codoc: 'Última ocorrência do CT-e', compl: 'Complemento de carga', atraso: 'Entregas', regiao: 'Região', cidade: 'Cidade', q: 'Busca' };
   // filtros que só valem para uma das planilhas
   var SO_CTE = { status: 1, origem: 1, motivo: 1, ocorr: 1, codoc: 1, compl: 1, atraso: 1 }, SO_COT = { situacao: 1 };
   var ORIGENS = { COLETA: 'Coletado (placa)', ARMAZEM: 'Entregue no armazém', SEM: 'Sem informação' };
 
   // escolhas de visualização (botões segmentados, tabela)
-  var UI = { evo: 'p', evoMed: 'fat', uf: 'fat', vend: 'fat', cli: 'fat', baixa: 'ocor',
+  var UI = { evo: 'p', evoMed: 'fat', uf: 'fat', reg: 'fat', cid: 'fat', cidTop: '10', vend: 'fat', cli: 'fat', baixa: 'ocor', baixaTop: '10',
              aba: 'cte', ordem: -1, dir: -1, pagina: 1, porPagina: CONFIG.linhasPorPagina, busca: '' };
 
   /* ===================================================================
@@ -332,6 +332,11 @@
   function dataDoValor(v) { var s = txt(v); return /^\d{4}-\d{2}-\d{2}/.test(s) ? s : ''; }
 
   var HOJE_ISO = hojeIso();
+  // v58 REGIÕES DO BRASIL (pela UF de entrega do CT-e / UF de destino da cotação)
+  var REGIOES = { 'Norte': ['AC','AP','AM','PA','RO','RR','TO'], 'Nordeste': ['AL','BA','CE','MA','PB','PE','PI','RN','SE'],
+                  'Centro-Oeste': ['DF','GO','MT','MS'], 'Sudeste': ['ES','MG','RJ','SP'], 'Sul': ['PR','RS','SC'] };
+  function nomeCidade(k) { var p = String(k).split(' / '); return titulo(p[0]) + (p[1] ? ' / ' + p[1] : ''); }
+  var REGIAO_UF = {}; Object.keys(REGIOES).forEach(function (r) { REGIOES[r].forEach(function (u) { REGIAO_UF[u] = r; }); });
   var CANC_FORA = { cte: 0, cot: 0 };   // quantos cancelados ficaram fora do painel (só para informação)
   function normalizarCte(fonte) {
     CANC_FORA.cte = 0;
@@ -356,6 +361,7 @@
       o.placa = placa;
       o.uf = txt(val(r, I.uf)).toUpperCase() || '—';
       o.cidade = txt(val(r, I.cidade)).toUpperCase() || '—';
+      o.regiao = REGIAO_UF[o.uf] || ''; o.cidUF = o.cidade !== '—' ? o.cidade + ' / ' + o.uf : '';
       o.cliente = txt(val(r, I.pagador)) || txt(val(r, I.remetente)) || '—';
       o.numero = txt(val(r, I.numero));
       o.tipoDoc = txt(val(r, I.tipoDoc));
@@ -455,6 +461,7 @@
       var dest = txt(val(r, I.destino)), p = dest.lastIndexOf('/');
       o.uf = p >= 0 ? dest.slice(p + 1).trim().toUpperCase() : '—';
       o.cidade = p >= 0 ? dest.slice(0, p).trim().toUpperCase() : dest.toUpperCase();
+      o.regiao = REGIAO_UF[o.uf] || ''; o.cidUF = o.cidade && o.cidade !== '—' ? o.cidade + ' / ' + o.uf : '';
       o.cliente = txt(val(r, I.pagador)) || '—';
       o.numero = txt(val(r, I.numero));
       // v57 INDÍCIO DE DUPLICIDADE: CNPJ pagador + cidade destino + valor da NF + peso + cubagem (qualquer data)
@@ -547,6 +554,8 @@
       if (F.vendedora && semCampo !== 'vendedora' && o.vendedora !== F.vendedora) return false;
       if (F.uf && semCampo !== 'uf' && o.uf !== F.uf) return false;
       if (F.cliente && o.cliente !== F.cliente) return false;
+      if (F.regiao && o.regiao !== F.regiao) return false;
+      if (F.cidade && o.cidUF !== F.cidade) return false;
       if (F.origem && o.origem !== F.origem) return false;
       if (F.compl && !o.complemento) return false;
       if (F.motivo && o.motivo !== F.motivo) return false;
@@ -568,6 +577,8 @@
       if (F.vendedora && semCampo !== 'vendedora' && o.vendedora !== F.vendedora) return false;
       if (F.uf && semCampo !== 'uf' && o.uf !== F.uf) return false;
       if (F.cliente && o.cliente !== F.cliente) return false;
+      if (F.regiao && o.regiao !== F.regiao) return false;
+      if (F.cidade && o.cidUF !== F.cidade) return false;
       if (F.situacao && o.situacao !== F.situacao) return false;
       if (q && o._q.indexOf(q) < 0) return false;
       return true;
@@ -632,6 +643,7 @@
     if (k === 'de' || k === 'ate' || k === 'dia') return fDate(v);
     if (k === 'ym') return nomeMes(v);
     if (k === 'vendedora') return NOMES[v] || v;
+    if (k === 'cidade') return nomeCidade(v);
     if (k === 'origem') return ORIGENS[v] || v;
     if (k === 'ocorr') return nomeOcorr(v);
     if (k === 'codoc') return nomeCodOc(v);
@@ -709,7 +721,7 @@
       (depois || desenharGraficos)();
     });
   }
-  ligarSeg('segEvo', 'evo'); ligarSeg('segEvoMed', 'evoMed'); ligarSeg('segUF', 'uf'); ligarSeg('segVend', 'vend'); ligarSeg('segCli', 'cli'); ligarSeg('segBaixa', 'baixa');
+  ligarSeg('segEvo', 'evo'); ligarSeg('segEvoMed', 'evoMed'); ligarSeg('segUF', 'uf'); ligarSeg('segReg', 'reg'); ligarSeg('segCid', 'cid'); ligarSeg('segCidTop', 'cidTop'); ligarSeg('segVend', 'vend'); ligarSeg('segCli', 'cli'); ligarSeg('segBaixa', 'baixa'); ligarSeg('segBaixaTop', 'baixaTop');
   ligarSeg('segTab', 'aba', function () { UI.pagina = 1; UI.ordem = -1; UI.soDup = false; UI.sel = null; UI.busca = ''; $('#tblSearch').value = ''; desenharTabela(); salvarNaURL(); $('.tbl-wrap').scrollTop = 0; });
 
   /* ===================================================================
@@ -1406,7 +1418,7 @@
   }
 
   function desenharGraficos(recriar) {
-    var ids = ['chEvo','chUF','chRitmo','chOrigem','chVend','chCli','chSit','chOcor'];
+    var ids = ['chEvo','chUF','chReg','chCid','chRitmo','chOrigem','chVend','chCli','chSit','chOcor'];
     desenharMapa();
     montarTabelasDosGraficos();
     if (!TEM_CHART()) {
@@ -1560,6 +1572,14 @@
       .filter(function (g) { return g.v > 0; }).sort(function (a, b) { return b.v - a.v; }).slice(0, 10);
     ranking('chCli', 'boxCli', porCli, UI.cli, UI.cli === 'cot' ? C2 : C1, F.cliente, 'cliente', function (g) { return g.key; }, largRot('chCli'));
 
+    // v58 regiões (as 5, sempre na tela) e top 15 cidades
+    var porReg = gruposRegiao(UI.reg);
+    ranking('chReg', 'boxReg', porReg, UI.reg, UI.reg === 'cot' ? C2 : C3, F.regiao, 'regiao', function (g) { return g.key; }, largRot('chReg'));
+    var porCid = agrupar(FC, FQ, 'cidUF', 'cidUF').map(function (g) { g.v = valorMetrica(g, UI.cid); return g; })
+      .filter(function (g) { return g.v > 0; }).sort(function (a, b) { return b.v - a.v; }).slice(0, +UI.cidTop || 10);
+    $('#cidTit').textContent = 'Top ' + UI.cidTop + ' cidades de entrega';   // v59/v60: botões Top 10 / 20 / 30 / 40 / 50
+    ranking('chCid', 'boxCid', porCid, UI.cid, UI.cid === 'cot' ? C2 : C4, F.cidade, 'cidade', function (g) { return nomeCidade(g.key); }, largRot('chCid'));
+
     /* ---------- 7. Situação das cotações (rosca) ---------- */
     var ordemSit = ['CT-e emitido', 'Contratada', 'Cotada', 'Cancelada'];
     var gSit = agrupar([], FQ, null, 'situacao').sort(function (a, b) { var ia = ordemSit.indexOf(a.key), ib = ordemSit.indexOf(b.key); return (ia < 0 ? 9 : ia) - (ib < 0 ? 9 : ib) || b.cot - a.cot; });
@@ -1572,8 +1592,13 @@
     /* ---------- 8. Status dos CT-e (só a relação, sem gráfico) ---------- */
     var listaStatus = function (itens, ativo, onClick) {
       var tot = sum(itens, function (d) { return d.valor; });
-      legendaRosca('lgBaixa', itens, tot, ativo, onClick, nInt);
-      $('#baixaTotal').innerHTML = itens.length ? '<b class="num">' + nInt(tot) + '</b> CT-e' : 'Sem dados para os filtros selecionados';
+      // v61: mostrar 10 / 20 / 30 ocorrências (o % continua sobre o total de CT-e; o filtrado ativo sempre aparece)
+      var n = +UI.baixaTop || 10, vis = itens.slice(0, n);
+      itens.slice(n).forEach(function (d) { if (d.key === ativo) vis.push(d); });
+      var resto = itens.filter(function (d) { return vis.indexOf(d) < 0; }), qResto = sum(resto, function (d) { return d.valor; });
+      legendaRosca('lgBaixa', vis, tot, ativo, onClick, nInt);
+      $('#baixaTotal').innerHTML = itens.length ? '<b class="num">' + nInt(tot) + '</b> CT-e' +
+        (resto.length ? '<span class="lt-resto">mais ' + nInt(resto.length) + (resto.length > 1 ? ' ocorrências' : ' ocorrência') + ' não mostradas (' + nInt(qResto) + ' CT-e)</span>' : '') : 'Sem dados para os filtros selecionados';
     };
     if (UI.baixa === 'ocor') {
       $('#baixaInfo').textContent = 'Código da Última Ocorrência';
@@ -1657,6 +1682,10 @@
             { l: 'Variação do frete', t: 'p' }, { l: 'Fechamento (CT-e ÷ cotações)', t: 'p' }];
   };
   var LINHA_G = function (nome, g) { return [nome, g.qtd, g.fat, g.icms, g.fsi, g.ticket, g.cot, g.valorIni, g.valor, g.varFrete, g.fechPct]; };
+  function gruposRegiao(k) {
+    var gs = agrupar(FC, FQ, 'regiao', 'regiao'), m = {}; gs.forEach(function (g) { m[g.key] = g; });
+    return Object.keys(REGIOES).map(function (r) { var g = m[r] || fechar(novoGrupo(r)); g.v = valorMetrica(g, k); return g; }).sort(function (a, b) { return b.v - a.v; });
+  }
   function montarTabelasDosGraficos() {
     var T = {}, tot = total(FC, FQ), totalG = LINHA_G('Total', tot);
     var chaves = function (gs) { return gs.map(function (g) { return g.key; }); };
@@ -1697,6 +1726,13 @@
     // 6. clientes (todos)
     var gc = ordenar(agrupar(FC, FQ, 'cliente', 'cliente').filter(function (g) { return g.key !== '—'; }), UI.cli);
     T.chCli = { cols: COLS_G('Cliente pagador'), filtro: 'cliente', chaves: chaves(gc), linhas: gc.map(function (g) { return LINHA_G(g.key, g); }), total: totalG };
+    // v58 regiões (com os estados de cada uma) e cidades (todas)
+    var gr = gruposRegiao(UI.reg), cr = COLS_G('Região'); cr.splice(1, 0, { l: 'Estados', t: 't' });
+    T.chReg = { cols: cr, filtro: 'regiao', chaves: chaves(gr), linhas: gr.map(function (g) { var l = LINHA_G(g.key, g); l.splice(1, 0, REGIOES[g.key].join(', ')); return l; }),
+      total: (function () { var l = totalG.slice(); l.splice(1, 0, ''); return l; })() };
+    var gci = ordenar(agrupar(FC, FQ, 'cidUF', 'cidUF'), UI.cid), cc = COLS_G('Cidade / UF'); cc.splice(1, 0, { l: 'Região', t: 't' });
+    T.chCid = { cols: cc, filtro: 'cidade', chaves: chaves(gci), linhas: gci.map(function (g) { var l = LINHA_G(nomeCidade(g.key), g); l.splice(1, 0, REGIAO_UF[g.key.split(' / ').pop()] || ''); return l; }),
+      total: (function () { var l = totalG.slice(); l.splice(1, 0, ''); return l; })() };
     // 7. situação das cotações
     var gs2 = agrupar([], FQ, null, 'situacao').sort(function (a, b) { return b.cot - a.cot; }), tq = total([], FQ);
     var linSit = function (nome, g, p) { var d = desconto(g); return [nome, g.cot, p, g.valorIni, g.valor, d.r, d.p]; };
