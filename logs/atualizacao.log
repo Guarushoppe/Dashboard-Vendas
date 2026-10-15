@@ -439,3 +439,25 @@
 [15/10/2026 09:39:57] [OK] dados.js atualizado (15595 KB).
 [15/10/2026 09:39:58] [OK] Gerar_Versao_Para_Enviar.bat iniciado (planilha atualizada).
 [15/10/2026 09:40:12] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16331 KB)
+[15/10/2026 10:09:17] [OK] Comercial CTe: 13303 linhas, 57 colunas (planilha, aba 'cte comercial')
+[15/10/2026 10:09:20] [OK] Comercial Cotações: 20586 linhas, 40 colunas (planilha, aba 'cotações')
+[15/10/2026 10:09:20] [OK] Ocorrências do SSW: 82 códigos em ocorrencias_ssw.csv
+[15/10/2026 10:09:20] [OK] Correções de vendedora: 0 CT-e em correcoes_vendedora.csv
+[15/10/2026 10:09:20] [OK] Comissão: 1 linha(s) em comissao.csv
+[15/10/2026 10:09:20] [OK] Prêmios: 5 faixa(s) em premios.csv
+[15/10/2026 10:09:20] [OK] Feriados: 130 dias de folga em Feriados.csv (20 marcados para trabalhar)
+[15/10/2026 10:09:20] [OK] Metas: 58 linha(s) lida(s) de metas.csv
+[15/10/2026 10:09:29] [OK] dados.js atualizado (15595 KB).
+[15/10/2026 10:09:29] [OK] Gerar_Versao_Para_Enviar.bat iniciado (planilha atualizada).
+[15/10/2026 10:09:42] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16331 KB)
+[15/10/2026 10:19:40] [OK] Comercial CTe: 13335 linhas, 57 colunas (planilha, aba 'cte comercial')
+[15/10/2026 10:19:43] [OK] Comercial Cotações: 20586 linhas, 40 colunas (planilha, aba 'cotações')
+[15/10/2026 10:19:43] [OK] Ocorrências do SSW: 82 códigos em ocorrencias_ssw.csv
+[15/10/2026 10:19:43] [OK] Correções de vendedora: 0 CT-e em correcoes_vendedora.csv
+[15/10/2026 10:19:43] [OK] Comissão: 1 linha(s) em comissao.csv
+[15/10/2026 10:19:43] [OK] Prêmios: 5 faixa(s) em premios.csv
+[15/10/2026 10:19:43] [OK] Feriados: 130 dias de folga em Feriados.csv (20 marcados para trabalhar)
+[15/10/2026 10:19:44] [OK] Metas: 58 linha(s) lida(s) de metas.csv
+[15/10/2026 10:19:52] [OK] dados.js atualizado (15615 KB).
+[15/10/2026 10:19:52] [OK] Gerar_Versao_Para_Enviar.bat iniciado (planilha atualizada).
+[15/10/2026 10:20:06] [OK] Envio: Arquivo para envio gerado: C:\Users\André\OneDrive\Dashboard Ostel\Vendas\enviar\Vendas.html (16352 KB)
