@@ -1,2 +1,2 @@
 /* Gerado por atualizar.ps1 - NAO EDITE. Mostra quando o atualizador rodou pela ultima vez. */
-window.OSTEL_STATUS = { verificadoEm: "2026-10-15T10:52:27", ok: true, mensagem: "ok", intervaloMinutos: 5 };
+window.OSTEL_STATUS = { verificadoEm: "2026-10-15T11:23:42", ok: true, mensagem: "ok", intervaloMinutos: 5 };
